@@ -69,7 +69,7 @@ int showMechs(char *slot)
 	}
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not get the number of mechanisms.\n");
+		fprintf(stderr, "ERROR: Could not get the number of mechanisms. rv=0x%08X\n", rv);
 		return 1;
 	}
         pMechanismList = (CK_MECHANISM_TYPE_PTR)malloc(ulMechCount * sizeof(CK_MECHANISM_TYPE_PTR));
@@ -78,7 +78,7 @@ int showMechs(char *slot)
 	rv = p11->C_GetMechanismList(slotID, pMechanismList, &ulMechCount);
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not get the list of mechanisms.\n");
+		fprintf(stderr, "ERROR: Could not get the list of mechanisms. rv=0x%08X\n", rv);
 		free(pMechanismList);
 		return 1;
 	}
@@ -120,7 +120,7 @@ int testDNSSEC(char *slot, char *pin)
 	}
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not open a session.\n");
+		fprintf(stderr, "ERROR: Could not open a session. rv=0x%08X\n", rv);
 		return 1;
 	}
 
@@ -134,7 +134,7 @@ int testDNSSEC(char *slot, char *pin)
 		}
 		else
 		{
-			fprintf(stderr, "ERROR: Could not log in on the token.\n");
+			fprintf(stderr, "ERROR: Could not log in on the token. rv=0x%08X\n", rv);
 		}
 		return 1;
 	}
@@ -180,7 +180,7 @@ int testSuiteB(char *slot, char *pin)
 	}
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not open a session.\n");
+		fprintf(stderr, "ERROR: Could not open a session. rv=0x%08X\n", rv);
 		return 1;
 	}
 
@@ -194,7 +194,7 @@ int testSuiteB(char *slot, char *pin)
 		}
 		else
 		{
-			fprintf(stderr, "ERROR: Could not log in on the token.\n");
+			fprintf(stderr, "ERROR: Could not log in on the token. rv=0x%08X\n", rv);
 		}
 		return 1;
 	}
@@ -409,7 +409,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_DigestInit(hSession, &mechanism);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not initialize digesting.\n");
+			printf("Available, but could not initialize digesting. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -417,7 +417,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_Digest(hSession, data, sizeof(data)-1, NULL_PTR, &digestLen);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not check the size of the digest.\n");
+			printf("Available, but could not check the size of the digest. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -427,7 +427,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		free(digest);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not digest the data.\n");
+			printf("Available, but could not digest the data. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -508,7 +508,7 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 		if (rv != CKR_OK)
 		{
-			printf("Failed\n");
+			printf("Failed. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -576,7 +576,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to generate a keypair\n");
+		printf("Failed to generate a keypair. rv=0x%08X\n", rv);
 		printf("RSA is probably not supported\n");
 		return 1;
 	}
@@ -596,7 +596,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_SignInit(hSession, &mechanism, hPrivateKey);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not initialize signing.\n");
+			printf("Available, but could not initialize signing. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -604,7 +604,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_Sign(hSession, data, sizeof(data)-1, NULL_PTR, &length);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not check the size of the signature.\n");
+			printf("Available, but could not check the size of the signature. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -614,7 +614,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		free(pSignature);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not sign the data.\n");
+			printf("Available, but could not sign the data. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -644,8 +644,8 @@ int testDNSSEC_dsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 	printf("\nTesting DSA key generation\n");
 	printf("**************************\n");
+	printf("  (Not testing functionality)\n");
 	printf("  Will test if DSA key generation is supported.\n");
-	printf("  Will not test the functionality.\n");
 	printf("  DNSSEC support keys up to 1024 bits.\n\n");
 
 	printf("  %s: ", getMechName(CKM_DSA_PARAMETER_GEN));
@@ -706,8 +706,8 @@ int testDNSSEC_dsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 	printf("\nTesting DSA signing\n");
 	printf("*******************\n");
+	printf("  (Not testing functionality)\n");
 	printf("  Will test if DSA signing is supported.\n");
-	printf("  Will not test the functionality.\n");
 	printf("  If the digesting algorithm is not available, \n");
 	printf("  then digesting has to be done in the host application.\n");
 	printf("  Then use the DSA only mechanism.\n\n");

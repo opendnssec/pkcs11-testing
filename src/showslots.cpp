@@ -48,7 +48,7 @@ int showSlots()
 	CK_RV rv = p11->C_GetSlotList(CK_FALSE, NULL_PTR, &ulSlotCount);
 	if (rv != CKR_OK)       
 	{
-		fprintf(stderr, "ERROR: Could not get the number of slots.\n");
+		fprintf(stderr, "ERROR: Could not get the number of slots. rv=0x%08X\n", rv);
 		return 1;
 	}
 
@@ -62,7 +62,7 @@ int showSlots()
 	rv = p11->C_GetSlotList(CK_FALSE, pSlotList, &ulSlotCount);
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not get the slot list.\n");
+		fprintf(stderr, "ERROR: Could not get the slot list. rv=0x%08X\n", rv);
 		free(pSlotList);
 		return 1;
 	}
@@ -77,7 +77,7 @@ int showSlots()
 		rv = p11->C_GetSlotInfo(pSlotList[i], &slotInfo);
 		if (rv != CKR_OK)
 		{
-			fprintf(stderr, "ERROR: Could not get info about slot %lu.\n", pSlotList[i]);
+			fprintf(stderr, "ERROR: Could not get info about slot %lu. rv=0x%08X\n", pSlotList[i], rv);
 			continue;
 		}
 
@@ -102,8 +102,8 @@ int showSlots()
 		rv = p11->C_GetTokenInfo(pSlotList[i], &tokenInfo);
 		if (rv != CKR_OK)
 		{
-			fprintf(stderr, "ERROR: Could not get info about the token in slot %lu.\n",
-				pSlotList[i]);
+			fprintf(stderr, "ERROR: Could not get info about the token in slot %lu. rv=0x%08X\n",
+				pSlotList[i], rv);
 			continue;
 		}
 
