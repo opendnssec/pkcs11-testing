@@ -601,7 +601,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 			continue;
 		}
 
-		rv = p11->C_Sign(hSession, NULL_PTR, 0, NULL_PTR, &length);
+		rv = p11->C_Sign(hSession, data, sizeof(data)-1, NULL_PTR, &length);
 		if (rv != CKR_OK)
 		{
 			printf("Available, but could not check the size of the signature.\n");
