@@ -234,9 +234,15 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -274,9 +280,15 @@ int testSuiteB_ECDSA(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -314,9 +326,15 @@ int testSuiteB_ECDH(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -356,9 +374,15 @@ int testSuiteB_SHA(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -398,9 +422,15 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -482,9 +512,14 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 	printf("  %s: ", getMechName(CKM_RSA_PKCS_KEY_PAIR_GEN));
 	rv = p11->C_GetMechanismInfo(slotID, CKM_RSA_PKCS_KEY_PAIR_GEN, &info);
-	if (rv != CKR_OK)
+	if (rv == CKR_MECHANISM_INVALID)
 	{
 		printf("Not available\n");
+		return 1;
+	}
+	if (rv != CKR_OK)
+	{
+		printf("Not available. rv=0x%08X\n", rv);
 		return 1;
 	}
 
@@ -585,9 +620,15 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -650,9 +691,14 @@ int testDNSSEC_dsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 	printf("  %s: ", getMechName(CKM_DSA_PARAMETER_GEN));
 	rv = p11->C_GetMechanismInfo(slotID, CKM_DSA_PARAMETER_GEN, &info);
-	if (rv != CKR_OK)
+	if (rv == CKR_MECHANISM_INVALID)
 	{
 		printf("Not available\n");
+		retVal = 1;
+	}
+	else if (rv != CKR_OK)
+	{
+		printf("Not available. rv=0x%08X\n", rv);
 		retVal = 1;
 	}
 	else
@@ -669,9 +715,14 @@ int testDNSSEC_dsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 	printf("  %s: ", getMechName(CKM_DSA_KEY_PAIR_GEN));
 	rv = p11->C_GetMechanismInfo(slotID, CKM_DSA_KEY_PAIR_GEN, &info);
-	if (rv != CKR_OK)
+	if (rv == CKR_MECHANISM_INVALID)
 	{
 		printf("Not available\n");
+		retVal = 1;
+	}
+	else if (rv != CKR_OK)
+	{
+		printf("Not available. rv=0x%08X\n", rv);
 		retVal = 1;
 	}
 	else
@@ -716,9 +767,15 @@ int testDNSSEC_dsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
-		if (rv != CKR_OK)
+		if (rv == CKR_MECHANISM_INVALID)
 		{
 			printf("Not available\n");
+			retVal = 1;
+			continue;
+		}
+		if (rv != CKR_OK)
+		{
+			printf("Not available. rv=0x%08X\n", rv);
 			retVal = 1;
 			continue;
 		}
@@ -750,7 +807,7 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 	rv = p11->C_GetMechanismInfo(slotID, mechType, &info);
 	if (rv != CKR_OK)
 	{
-		printf(" Could not get info about the mechanism\n");
+		printf(" Could not get info about the mechanism. rv=0x%08X\n", rv);
 		return;
 	}
 
