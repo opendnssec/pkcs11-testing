@@ -414,7 +414,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 			continue;
 		}
 
-		rv = p11->C_Digest(hSession, NULL_PTR, 0, NULL_PTR, &digestLen);
+		rv = p11->C_Digest(hSession, data, sizeof(data)-1, NULL_PTR, &digestLen);
 		if (rv != CKR_OK)
 		{
 			printf("Available, but could not check the size of the digest.\n");
