@@ -227,7 +227,7 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	printf("\nTesting symmetric encryption\n");
 	printf("****************************\n");
 	printf("  (Not testing functionality)\n");
-	printf("  Should support between 128 and 256 bits.\n");
+	printf("  Should support between 16 and 32 bytes.\n");
 	printf("  Note that GCM mode is not supported in PKCS#11 v2.20.\n\n");
 
 	for (int i = 0; i < 2; i++)
@@ -241,9 +241,9 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 			continue;
 		}
 
-		if (info.ulMinKeySize > 128 || info.ulMaxKeySize < 256)
+		if (info.ulMinKeySize > 16 || info.ulMaxKeySize < 32)
 		{
-			printf("OK, but only support %i-%i bits\n", info.ulMinKeySize, info.ulMaxKeySize);
+			printf("OK, but only support %i-%i bytes\n", info.ulMinKeySize, info.ulMaxKeySize);
 		}
 		else
 		{
