@@ -446,13 +446,15 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	CK_OBJECT_HANDLE hPublicKey, hPrivateKey;
 	CK_BBOOL ckTrue = CK_TRUE;
 	CK_MECHANISM keyGenMechanism = { CKM_RSA_PKCS_KEY_PAIR_GEN, NULL_PTR, 0};
+	CK_BYTE publicExponent[] = { 1, 0, 1 };
 
 	CK_ATTRIBUTE publicKeyTemplate[] = {
 		{ CKA_ENCRYPT, &ckTrue, sizeof(ckTrue) },
 		{ CKA_VERIFY, &ckTrue, sizeof(ckTrue) },
 		{ CKA_WRAP, &ckTrue, sizeof(ckTrue) },
 		{ CKA_TOKEN, &ckTrue, sizeof(ckTrue) },
-		{ CKA_MODULUS_BITS, NULL_PTR, 0 }
+		{ CKA_MODULUS_BITS, NULL_PTR, 0 },
+		{ CKA_PUBLIC_EXPONENT, &publicExponent, sizeof(publicExponent) }
 	};
 	CK_ATTRIBUTE privateKeyTemplate[] = {
 		{ CKA_PRIVATE, &ckTrue, sizeof(ckTrue) },
@@ -503,7 +505,7 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 		publicKeyTemplate[4].pValue = &keySize;
 		publicKeyTemplate[4].ulValueLen = sizeof(keySize);
-		rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 5, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
+		rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 		if (rv != CKR_OK)
 		{
 			printf("Failed\n");
@@ -528,6 +530,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	CK_OBJECT_HANDLE hPublicKey, hPrivateKey;
 	CK_BBOOL ckTrue = CK_TRUE;
 	CK_MECHANISM keyGenMechanism = { CKM_RSA_PKCS_KEY_PAIR_GEN, NULL_PTR, 0};
+	CK_BYTE publicExponent[] = { 1, 0, 1 };
 	CK_ULONG modulusBits = 1024;
 	CK_MECHANISM mechanism = {
 		CKM_VENDOR_DEFINED, NULL_PTR, 0
@@ -541,7 +544,8 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		{ CKA_VERIFY, &ckTrue, sizeof(ckTrue) },
 		{ CKA_WRAP, &ckTrue, sizeof(ckTrue) },
 		{ CKA_TOKEN, &ckTrue, sizeof(ckTrue) },
-		{ CKA_MODULUS_BITS, &modulusBits, sizeof(modulusBits) }
+		{ CKA_MODULUS_BITS, &modulusBits, sizeof(modulusBits) },
+		{ CKA_PUBLIC_EXPONENT, &publicExponent, sizeof(publicExponent) }
 	};
 	CK_ATTRIBUTE privateKeyTemplate[] = {
 		{ CKA_PRIVATE, &ckTrue, sizeof(ckTrue) },
@@ -569,7 +573,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	printf("  then digesting has to be done in the host application.\n");
 	printf("  Then use the RSA only mechanisms.\n\n");
 
-	rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 5, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
+	rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 	if (rv != CKR_OK)
 	{
 		printf("Failed to generate a keypair\n");
