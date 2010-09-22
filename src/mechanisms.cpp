@@ -35,6 +35,7 @@
 #include "mechanisms.h"
 #include "config.h"
 #include "getpw.h"
+#include "session.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,41 +103,9 @@ int testDNSSEC(char *slot, char *pin)
 	CK_RV rv;
 	CK_SESSION_HANDLE hSession;
 	int retVal = 0;
-	char user_pin_copy[MAX_PIN_LEN+1];
 
-	if (slot == NULL)       
-	{
-		fprintf(stderr, "ERROR: A slot number must be supplied. "
-			"Use --slot <number>\n");
-		return 1;
-	}
-	slotID = atoi(slot);
-
-	// Open a session
-	rv = p11->C_OpenSession(slotID, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL_PTR, NULL_PTR, &hSession);
-	if (rv == CKR_SLOT_ID_INVALID)
-	{
-		fprintf(stderr, "ERROR: The slot does not exist.\n");
-		return 1;
-	}
-	if (rv != CKR_OK)
-	{
-		fprintf(stderr, "ERROR: Could not open a session. rv=0x%08X\n", rv);
-		return 1;
-	}
-
-	// Login
-	getPW(pin, user_pin_copy, CKU_USER);
-	rv = p11->C_Login(hSession, CKU_USER, (CK_UTF8CHAR_PTR)user_pin_copy, strlen(user_pin_copy));
-	if (rv != CKR_OK)
-	{
-		if (rv == CKR_PIN_INCORRECT) {
-			fprintf(stderr, "ERROR: The given user PIN does not match the one in the token.\n");
-		}
-		else
-		{
-			fprintf(stderr, "ERROR: Could not log in on the token. rv=0x%08X\n", rv);
-		}
+	if (openLogin(slot, pin, &slotID, &hSession))
+	{ 
 		return 1;
 	}
 
@@ -162,41 +131,9 @@ int testSuiteB(char *slot, char *pin)
 	CK_RV rv;
 	CK_SESSION_HANDLE hSession;
 	int retVal = 0;
-	char user_pin_copy[MAX_PIN_LEN+1];
 
-	if (slot == NULL)       
-	{
-		fprintf(stderr, "ERROR: A slot number must be supplied. "
-			"Use --slot <number>\n");
-		return 1;
-	}
-	slotID = atoi(slot);
-
-	// Open a session
-	rv = p11->C_OpenSession(slotID, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL_PTR, NULL_PTR, &hSession);
-	if (rv == CKR_SLOT_ID_INVALID)
-	{
-		fprintf(stderr, "ERROR: The slot does not exist.\n");
-		return 1;
-	}
-	if (rv != CKR_OK)
-	{
-		fprintf(stderr, "ERROR: Could not open a session. rv=0x%08X\n", rv);
-		return 1;
-	}
-
-	// Login
-	getPW(pin, user_pin_copy, CKU_USER);
-	rv = p11->C_Login(hSession, CKU_USER, (CK_UTF8CHAR_PTR)user_pin_copy, strlen(user_pin_copy));
-	if (rv != CKR_OK)
-	{
-		if (rv == CKR_PIN_INCORRECT) {
-			fprintf(stderr, "ERROR: The given user PIN does not match the one in the token.\n");
-		}
-		else
-		{
-			fprintf(stderr, "ERROR: Could not log in on the token. rv=0x%08X\n", rv);
-		}
+	if (openLogin(slot, pin, &slotID, &hSession))
+	{ 
 		return 1;
 	}
 
