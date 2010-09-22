@@ -56,7 +56,11 @@ void usage()
 	printf("  --help            Shows this help screen.\n");
 	printf("  --show-mechanisms Display the available mechanisms.\n");
 	printf("  --show-slots      Display the available slots.\n");
+	printf("  --test-all        Run all tests (except stability test)\n");
 	printf("  --test-dnssec     Test if the DNSSEC algorithms are available.\n");
+	printf("  --test-rsaimport  Test if RSA keys can be imported.\n");
+	printf("  --test-rsapub     Test if the public information is available in the private key.\n");
+	printf("  --test-stability  Test if the HSM is stable. Creating keys and signing.\n");
 	printf("  --test-suiteb     Test if the NSA Suite B algorithms are available.\n");
 	printf("  -v                Show version info.\n");
 	printf("  --version         Show version info.\n");
@@ -74,7 +78,11 @@ enum {
 	OPT_SHOW_MECHANISMS,
 	OPT_SHOW_SLOTS,
 	OPT_SLOT,
+	OPT_TEST_ALL,
 	OPT_TEST_DNSSEC,
+	OPT_TEST_RSAIMPORT,
+	OPT_TEST_RSAPUB,
+	OPT_TEST_STABILITY,
 	OPT_TEST_SUITEB,
 	OPT_VERSION
 };
@@ -87,7 +95,11 @@ static const struct option long_options[] = {
 	{ "show-mechanisms", 0, NULL, OPT_SHOW_MECHANISMS },
 	{ "show-slots",      0, NULL, OPT_SHOW_SLOTS },
 	{ "slot",            1, NULL, OPT_SLOT },
+	{ "test-all",        0, NULL, OPT_TEST_ALL },
 	{ "test-dnssec",     0, NULL, OPT_TEST_DNSSEC },
+	{ "test-rsaimport",  0, NULL, OPT_TEST_RSAIMPORT },
+	{ "test-rsapub",     0, NULL, OPT_TEST_RSAPUB },
+	{ "test-stability",  0, NULL, OPT_TEST_STABILITY },
 	{ "test-suiteb",     0, NULL, OPT_TEST_SUITEB },
 	{ "version",         0, NULL, OPT_VERSION },
 	{ NULL,              0, NULL, 0 }
@@ -98,18 +110,11 @@ CK_FUNCTION_LIST_PTR p11;
 // The main function
 int main(int argc, char *argv[])
 {
-	int option_index = 0;
-	int opt;
+	int option_index = 0, opt, retVal = 0, action = 0;
 
 	char *userPIN = NULL;
 	char *module = NULL;
 	char *slot = NULL;
-
-	int doShowMechs = 0;
-	int doShowSlots = 0;
-	int doTestDNSSEC = 0;
-	int doTestSuiteB = 0;
-	int action = 0;
 
 	CK_C_GetFunctionList pGetFunctionList;
 	CK_RV rv;
@@ -122,20 +127,14 @@ int main(int argc, char *argv[])
 		switch (opt)
 		{
 			case OPT_SHOW_MECHANISMS:
-				doShowMechs = 1;
-				action++;
-				break;
 			case OPT_SHOW_SLOTS:
-				doShowSlots = 1;
-				action++;
-				break;
+			case OPT_TEST_ALL:
 			case OPT_TEST_DNSSEC:
-				doTestDNSSEC = 1;
-				action++;
-				break;
+			case OPT_TEST_RSAIMPORT:
+			case OPT_TEST_RSAPUB:
+			case OPT_TEST_STABILITY:
 			case OPT_TEST_SUITEB:
-				doTestSuiteB = 1;
-				action++;
+				action = opt;
 				break;
 			case OPT_SLOT:
 				slot = optarg;
@@ -192,29 +191,37 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	if (doShowSlots)
+	switch (action)
 	{
-		showSlots();
-	}
-
-	if (doShowMechs)
-	{
-		showMechs(slot);
-	}
-
-	if (doTestDNSSEC)
-	{
-		testDNSSEC(slot, userPIN);
-	}
-
-	if (doTestSuiteB)
-	{
-		testSuiteB(slot, userPIN);
+		case OPT_SHOW_MECHANISMS:
+			retVal = showMechs(slot);
+			break;
+		case OPT_SHOW_SLOTS:
+			retVal = showSlots();
+			break;
+		case OPT_TEST_ALL:
+			if (testDNSSEC(slot, userPIN)) retVal = 1;
+			if (testSuiteB(slot, userPIN)) retVal = 1;
+			break;
+		case OPT_TEST_DNSSEC:
+			retVal = testDNSSEC(slot, userPIN);
+			break;
+		case OPT_TEST_RSAIMPORT:
+			break;
+		case OPT_TEST_RSAPUB:
+			break;
+		case OPT_TEST_STABILITY:
+			break;
+		case OPT_TEST_SUITEB:
+			retVal = testSuiteB(slot, userPIN);
+			break;
+		default:
+			break;
 	}
 
 	// Finalize the library
 	p11->C_Finalize(NULL_PTR);
 	unloadLibrary(moduleHandle);
 
-	return 0;
+	return retVal;
 }
