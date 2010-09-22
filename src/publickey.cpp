@@ -33,8 +33,6 @@
  *****************************************************************************/
 
 #include "publickey.h"
-#include "config.h"
-#include "getpw.h"
 #include "session.h"
 
 #include <stdio.h>
