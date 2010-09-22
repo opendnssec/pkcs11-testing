@@ -84,6 +84,7 @@ int showMechs(char *slot)
 	}
 
 	printf("The following mechanisms are supported:\n");
+	printf("(key size is in bits or bytes depending on mechanism)\n\n");
 
 	for (int i = 0; i < ulMechCount; i++)
 	{
@@ -227,7 +228,7 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	printf("\nTesting symmetric encryption\n");
 	printf("****************************\n");
 	printf("  (Not testing functionality)\n");
-	printf("  Should support between 16 and 32 bytes.\n");
+	printf("  Should support between 128 and 256 bits.\n");
 	printf("  Note that GCM mode is not supported in PKCS#11 v2.20.\n\n");
 
 	for (int i = 0; i < 2; i++)
@@ -249,7 +250,7 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 		if (info.ulMinKeySize > 16 || info.ulMaxKeySize < 32)
 		{
-			printf("OK, but only support %i-%i bytes\n", info.ulMinKeySize, info.ulMaxKeySize);
+			printf("OK, but only support %i-%i bits.\n", info.ulMinKeySize * 8, info.ulMaxKeySize * 8);
 		}
 		else
 		{
@@ -822,11 +823,11 @@ void printMechKeySize(CK_ULONG ulMinKeySize, CK_ULONG ulMaxKeySize)
 	{
 		if (ulMaxKeySize > ulMinKeySize)
 		{
-			printf(", keysize (%i-%i)", ulMinKeySize, ulMaxKeySize);
+			printf(", key size (%i-%i)", ulMinKeySize, ulMaxKeySize);
 		}
 		else
 		{
-			printf(", keysize (%i)", ulMinKeySize);
+			printf(", key size (%i)", ulMinKeySize);
 		}
 	}
 }
