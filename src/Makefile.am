@@ -12,6 +12,7 @@ pkcs11_testing_SOURCES =	pkcs11-testing.cpp \
 				getpw.cpp \
 				library.cpp \
 				mechanisms.cpp \
+				publickey.cpp \
 				showslots.cpp
 
 EXTRA_DIST =			$(srcdir)/*.h \
