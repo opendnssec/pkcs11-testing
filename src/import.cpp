@@ -150,7 +150,6 @@ int testRSAImport(CK_SESSION_HANDLE hSession)
 	if (rv != CKR_OK)
 	{
 		printf("Failed to import. rv=%s\n", rv2string(rv));
-		printf("RSA is probably not supported\n");
 		return 1;
 	}
 	printf("OK\n");
@@ -160,7 +159,6 @@ int testRSAImport(CK_SESSION_HANDLE hSession)
 	if (rv != CKR_OK)
 	{
 		printf("Failed to import. rv=%s\n", rv2string(rv));
-		printf("RSA is probably not supported\n");
 		p11->C_DestroyObject(hSession, hPublicKey);
 		return 1;
 	}
