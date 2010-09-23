@@ -34,7 +34,7 @@
 
 #include "showslots.h"
 #include "cryptoki.h"
-#include "error.h";
+#include "error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
