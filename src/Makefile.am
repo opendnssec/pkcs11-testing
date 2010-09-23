@@ -9,6 +9,7 @@ AM_CPPFLAGS = 			-I$(srcdir)/cryptoki_compat
 bin_PROGRAMS =			pkcs11-testing
 
 pkcs11_testing_SOURCES =	pkcs11-testing.cpp \
+				error.cpp \
 				getpw.cpp \
 				library.cpp \
 				mechanisms.cpp \

@@ -40,6 +40,7 @@
 #include "showslots.h"
 #include "publickey.h"
 #include "import.h"
+#include "error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -195,7 +196,7 @@ int main(int argc, char *argv[])
 	rv = p11->C_Initialize(NULL_PTR);
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not initialize the library. rv=0x%08X\n", rv);
+		fprintf(stderr, "ERROR: Could not initialize the library. rv=%s\n", rv2string(rv));
 		exit(1);
 	}
 

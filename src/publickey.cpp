@@ -33,6 +33,7 @@
  *****************************************************************************/
 
 #include "publickey.h"
+#include "error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,8 +90,7 @@ int testRSAPub(CK_SESSION_HANDLE hSession)
 	rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to generate a keypair. rv=0x%08X\n", rv);
-		printf("RSA is probably not supported\n");
+		printf("Failed to generate a keypair. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 	printf("OK\n");
@@ -126,7 +126,7 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 	rv = p11->C_GetAttributeValue(hSession, hPublicKey, pubTemplate,  2);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the size of modulus and pubexp. rv=0x%08X\n", rv);
+		printf("Failed to get the size of modulus and pubexp. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 
@@ -153,7 +153,7 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 	rv = p11->C_GetAttributeValue(hSession, hPublicKey, pubTemplate,  2);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the modulus and pubexp. rv=0x%08X\n", rv);
+		printf("Failed to get the modulus and pubexp. rv=%s\n", rv2string(rv));
 		free(public_exponent1);
 		free(modulus1);
 		return 1;
@@ -178,7 +178,7 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 	}
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the size of modulus and pubexp. rv=0x%08X\n", rv);
+		printf("Failed to get the size of modulus and pubexp. rv=%s\n", rv2string(rv));
 		free(public_exponent1);
 		free(modulus1);
 		return 1;
@@ -211,7 +211,7 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 	rv = p11->C_GetAttributeValue(hSession, hPrivateKey, pubTemplate,  2);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the modulus and pubexp. rv=0x%08X\n", rv);
+		printf("Failed to get the modulus and pubexp. rv=%s\n", rv2string(rv));
 		free(public_exponent1);
 		free(modulus1);
 		free(public_exponent2);

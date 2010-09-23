@@ -34,6 +34,7 @@
 
 #include "showslots.h"
 #include "cryptoki.h"
+#include "error.h";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +49,7 @@ int showSlots()
 	CK_RV rv = p11->C_GetSlotList(CK_FALSE, NULL_PTR, &ulSlotCount);
 	if (rv != CKR_OK)       
 	{
-		fprintf(stderr, "ERROR: Could not get the number of slots. rv=0x%08X\n", rv);
+		fprintf(stderr, "ERROR: Could not get the number of slots. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 
@@ -62,7 +63,7 @@ int showSlots()
 	rv = p11->C_GetSlotList(CK_FALSE, pSlotList, &ulSlotCount);
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not get the slot list. rv=0x%08X\n", rv);
+		fprintf(stderr, "ERROR: Could not get the slot list. rv=%s\n", rv2string(rv));
 		free(pSlotList);
 		return 1;
 	}
@@ -77,7 +78,7 @@ int showSlots()
 		rv = p11->C_GetSlotInfo(pSlotList[i], &slotInfo);
 		if (rv != CKR_OK)
 		{
-			fprintf(stderr, "ERROR: Could not get info about slot %lu. rv=0x%08X\n", pSlotList[i], rv);
+			fprintf(stderr, "ERROR: Could not get info about slot %lu. rv=%s\n", pSlotList[i], rv2string(rv));
 			continue;
 		}
 
@@ -102,8 +103,8 @@ int showSlots()
 		rv = p11->C_GetTokenInfo(pSlotList[i], &tokenInfo);
 		if (rv != CKR_OK)
 		{
-			fprintf(stderr, "ERROR: Could not get info about the token in slot %lu. rv=0x%08X\n",
-				pSlotList[i], rv);
+			fprintf(stderr, "ERROR: Could not get info about the token in slot %lu. rv=%s\n",
+				pSlotList[i], rv2string(rv));
 			continue;
 		}
 

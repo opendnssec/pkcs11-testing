@@ -33,6 +33,7 @@
  *****************************************************************************/
 
 #include "import.h"
+#include "error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -148,7 +149,7 @@ int testRSAImport(CK_SESSION_HANDLE hSession)
 	rv = p11->C_CreateObject(hSession, pubTemplate, 10, &hPublicKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to import. rv=0x%08X\n", rv);
+		printf("Failed to import. rv=%s\n", rv2string(rv));
 		printf("RSA is probably not supported\n");
 		return 1;
 	}
@@ -158,7 +159,7 @@ int testRSAImport(CK_SESSION_HANDLE hSession)
 	rv = p11->C_CreateObject(hSession, privTemplate, 19, &hPrivateKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to import. rv=0x%08X\n", rv);
+		printf("Failed to import. rv=%s\n", rv2string(rv));
 		printf("RSA is probably not supported\n");
 		p11->C_DestroyObject(hSession, hPublicKey);
 		return 1;
@@ -195,7 +196,7 @@ int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey)
 	rv = p11->C_GetAttributeValue(hSession, hPublicKey, template1,  1);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get attribute. rv=0x%08X\n", rv);
+		printf("Failed to get attribute. rv=%s\n", rv2string(rv));
 		retVal = 1;
 	}
 	else
@@ -209,7 +210,7 @@ int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey)
 	rv = p11->C_GetAttributeValue(hSession, hPublicKey, template2,  1);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the size of the attribute. rv=0x%08X\n", rv);
+		printf("Failed to get the size of the attribute. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 
@@ -226,7 +227,7 @@ int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey)
 	rv = p11->C_GetAttributeValue(hSession, hPublicKey, template2,  1);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the attribute. rv=0x%08X\n", rv);
+		printf("Failed to get the attribute. rv=%s\n", rv2string(rv));
 		free(modulus);
 		return 1;
 	}
@@ -273,14 +274,14 @@ int testRSAImport_signverify(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPubli
 	rv = p11->C_SignInit(hSession, &mechanism, hPrivateKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to initialize signing. rv=0x%08X\n", rv);
+		printf("Failed to initialize signing. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 
 	rv = p11->C_Sign(hSession, data, sizeof(data)-1, NULL_PTR, &pSignature_len);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to get the length of the signature. rv=0x%08X\n", rv);
+		printf("Failed to get the length of the signature. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 
@@ -294,7 +295,7 @@ int testRSAImport_signverify(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPubli
 	rv = p11->C_Sign(hSession, data, sizeof(data)-1, pSignature, &pSignature_len);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to sign data. rv=0x%08X\n", rv);
+		printf("Failed to sign data. rv=%s\n", rv2string(rv));
 		free (pSignature);
 		return 1;
 	}
@@ -305,7 +306,7 @@ int testRSAImport_signverify(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPubli
 	rv = p11->C_VerifyInit(hSession, &mechanism, hPublicKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to sign data. rv=0x%08X\n", rv);
+		printf("Failed to sign data. rv=%s\n", rv2string(rv));
 		free (pSignature);
 		return 1;
 	}
@@ -314,7 +315,7 @@ int testRSAImport_signverify(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPubli
 	free (pSignature);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to verify signature. rv=0x%08X\n", rv);
+		printf("Failed to verify signature. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 

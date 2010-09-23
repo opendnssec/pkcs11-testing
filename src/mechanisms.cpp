@@ -33,6 +33,7 @@
  *****************************************************************************/
 
 #include "mechanisms.h"
+#include "error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,7 +68,7 @@ int showMechs(char *slot)
 	}
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not get the number of mechanisms. rv=0x%08X\n", rv);
+		fprintf(stderr, "ERROR: Could not get the number of mechanisms. rv=%s\n", rv2string(rv));
 		return 1;
 	}
         pMechanismList = (CK_MECHANISM_TYPE_PTR)malloc(ulMechCount * sizeof(CK_MECHANISM_TYPE_PTR));
@@ -76,7 +77,7 @@ int showMechs(char *slot)
 	rv = p11->C_GetMechanismList(slotID, pMechanismList, &ulMechCount);
 	if (rv != CKR_OK)
 	{
-		fprintf(stderr, "ERROR: Could not get the list of mechanisms. rv=0x%08X\n", rv);
+		fprintf(stderr, "ERROR: Could not get the list of mechanisms. rv=%s\n", rv2string(rv));
 		free(pMechanismList);
 		return 1;
 	}
@@ -159,7 +160,7 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -205,7 +206,7 @@ int testSuiteB_ECDSA(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -251,7 +252,7 @@ int testSuiteB_ECDH(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -299,7 +300,7 @@ int testSuiteB_SHA(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -347,7 +348,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -356,7 +357,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_DigestInit(hSession, &mechanism);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not initialize digesting. rv=0x%08X\n", rv);
+			printf("Available, but could not initialize digesting. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -364,7 +365,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_Digest(hSession, data, sizeof(data)-1, NULL_PTR, &digestLen);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not check the size of the digest. rv=0x%08X\n", rv);
+			printf("Available, but could not check the size of the digest. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -374,7 +375,7 @@ int testDNSSEC_digest(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		free(digest);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not digest the data. rv=0x%08X\n", rv);
+			printf("Available, but could not digest the data. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -436,7 +437,7 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	}
 	if (rv != CKR_OK)
 	{
-		printf("Not available. rv=0x%08X\n", rv);
+		printf("Not available. rv=%s\n", rv2string(rv));
 		return 1;
 	}
 
@@ -460,7 +461,7 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 		if (rv != CKR_OK)
 		{
-			printf("Failed. rv=0x%08X\n", rv);
+			printf("Failed. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -528,7 +529,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	rv = p11->C_GenerateKeyPair(hSession, &keyGenMechanism, publicKeyTemplate, 6, privateKeyTemplate, 6, &hPublicKey, &hPrivateKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to generate a keypair. rv=0x%08X\n", rv);
+		printf("Failed to generate a keypair. rv=%s\n", rv2string(rv));
 		printf("RSA is probably not supported\n");
 		return 1;
 	}
@@ -545,7 +546,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -554,7 +555,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_SignInit(hSession, &mechanism, hPrivateKey);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not initialize signing. rv=0x%08X\n", rv);
+			printf("Available, but could not initialize signing. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -562,7 +563,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		rv = p11->C_Sign(hSession, data, sizeof(data)-1, NULL_PTR, &length);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not check the size of the signature. rv=0x%08X\n", rv);
+			printf("Available, but could not check the size of the signature. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -572,7 +573,7 @@ int testDNSSEC_rsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		free(pSignature);
 		if (rv != CKR_OK)
 		{
-			printf("Available, but could not sign the data. rv=0x%08X\n", rv);
+			printf("Available, but could not sign the data. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -615,7 +616,7 @@ int testDNSSEC_dsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	}
 	else if (rv != CKR_OK)
 	{
-		printf("Not available. rv=0x%08X\n", rv);
+		printf("Not available. rv=%s\n", rv2string(rv));
 		retVal = 1;
 	}
 	else
@@ -639,7 +640,7 @@ int testDNSSEC_dsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	}
 	else if (rv != CKR_OK)
 	{
-		printf("Not available. rv=0x%08X\n", rv);
+		printf("Not available. rv=%s\n", rv2string(rv));
 		retVal = 1;
 	}
 	else
@@ -692,7 +693,7 @@ int testDNSSEC_dsa_sign(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 		}
 		if (rv != CKR_OK)
 		{
-			printf("Not available. rv=0x%08X\n", rv);
+			printf("Not available. rv=%s\n", rv2string(rv));
 			retVal = 1;
 			continue;
 		}
@@ -724,7 +725,7 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 	rv = p11->C_GetMechanismInfo(slotID, mechType, &info);
 	if (rv != CKR_OK)
 	{
-		printf(" Could not get info about the mechanism. rv=0x%08X\n", rv);
+		printf(" Could not get info about the mechanism. rv=%s\n", rv2string(rv));
 		return;
 	}
 
