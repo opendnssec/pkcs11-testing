@@ -33,7 +33,6 @@
  *****************************************************************************/
 
 #include "mechanisms.h"
-#include "session.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,17 +94,10 @@ int showMechs(char *slot)
 	return 0;
 }
 
-int testDNSSEC(char *slot, char *pin)
+int testDNSSEC(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 {
-	CK_SLOT_ID slotID;
 	CK_RV rv;
-	CK_SESSION_HANDLE hSession;
 	int retVal = 0;
-
-	if (openLogin(slot, pin, &slotID, &hSession))
-	{ 
-		return 1;
-	}
 
 	printf("\n************************************************\n");
 	printf("* Testing what DNSSEC algorithms are available *\n");
@@ -118,22 +110,13 @@ int testDNSSEC(char *slot, char *pin)
 	if (testDNSSEC_dsa_keygen(slotID, hSession)) retVal = 1;
 	if (testDNSSEC_dsa_sign(slotID, hSession)) retVal = 1;
 
-	p11->C_CloseSession(hSession);
-
 	return retVal;
 }
 
-int testSuiteB(char *slot, char *pin)
+int testSuiteB(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 {
-	CK_SLOT_ID slotID;
 	CK_RV rv;
-	CK_SESSION_HANDLE hSession;
 	int retVal = 0;
-
-	if (openLogin(slot, pin, &slotID, &hSession))
-	{ 
-		return 1;
-	}
 
 	printf("\n***************************************************\n");
 	printf("* Testing if NSA Suite B algorithms are available *\n");
@@ -143,8 +126,6 @@ int testSuiteB(char *slot, char *pin)
 	if (testSuiteB_ECDSA(slotID, hSession)) retVal = 1;
 	if (testSuiteB_ECDH(slotID, hSession)) retVal = 1;
 	if (testSuiteB_SHA(slotID, hSession)) retVal = 1;
-
-	p11->C_CloseSession(hSession);
 
 	return retVal;
 }

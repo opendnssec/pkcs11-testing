@@ -37,7 +37,7 @@
 
 #include "cryptoki.h"
 
-int testRSAImport(char *slot, char *pin);
+int testRSAImport(CK_SESSION_HANDLE hSession);
 
 // Internal
 int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey);

@@ -33,7 +33,6 @@
  *****************************************************************************/
 
 #include "publickey.h"
-#include "session.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,11 +43,9 @@
 
 extern CK_FUNCTION_LIST_PTR p11;
 
-int testRSAPub(char *slot, char *pin)
+int testRSAPub(CK_SESSION_HANDLE hSession)
 {
-	CK_SLOT_ID slotID;
 	CK_RV rv;
-	CK_SESSION_HANDLE hSession;
 	int retVal = 0;
 
 	CK_BBOOL ckTrue = CK_TRUE;
@@ -77,11 +74,6 @@ int testRSAPub(char *slot, char *pin)
 		{ CKA_TOKEN, &ckTrue, sizeof(ckTrue) }
 	};
 
-	if (openLogin(slot, pin, &slotID, &hSession))
-	{
-		return 1;
-	}
-
 	printf("\n******************************************************\n");
 	printf("* Test for public information in the RSA private key *\n");
 	printf("******************************************************\n\n");
@@ -107,7 +99,6 @@ int testRSAPub(char *slot, char *pin)
 
 	p11->C_DestroyObject(hSession, hPublicKey);
 	p11->C_DestroyObject(hSession, hPrivateKey);
-	p11->C_CloseSession(hSession);
 
 	return retVal;
 }

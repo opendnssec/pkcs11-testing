@@ -34,6 +34,7 @@
 
 #include <config.h>
 #include "pkcs11-testing.h"
+#include "session.h"
 #include "library.h"
 #include "mechanisms.h"
 #include "showslots.h"
@@ -112,11 +113,13 @@ CK_FUNCTION_LIST_PTR p11;
 // The main function
 int main(int argc, char *argv[])
 {
-	int option_index = 0, opt, retVal = 0, action = 0;
+	int option_index = 0, opt, retVal = 0, action = 0, needSession = 0;
 
 	char *userPIN = NULL;
 	char *module = NULL;
 	char *slot = NULL;
+	CK_SLOT_ID slotID;
+	CK_SESSION_HANDLE hSession;
 
 	CK_C_GetFunctionList pGetFunctionList;
 	CK_RV rv;
@@ -130,12 +133,15 @@ int main(int argc, char *argv[])
 		{
 			case OPT_SHOW_MECHANISMS:
 			case OPT_SHOW_SLOTS:
+				action = opt;
+				break;
 			case OPT_TEST_ALL:
 			case OPT_TEST_DNSSEC:
 			case OPT_TEST_RSAIMPORT:
 			case OPT_TEST_RSAPUB:
 			case OPT_TEST_STABILITY:
 			case OPT_TEST_SUITEB:
+				needSession = 1;
 				action = opt;
 				break;
 			case OPT_SLOT:
@@ -193,6 +199,19 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
+	if (needSession)
+	{
+		retVal = openLogin(slot, userPIN, &slotID, &hSession);
+		if (retVal)
+		{
+			// Finalize the library
+			p11->C_Finalize(NULL_PTR);
+			unloadLibrary(moduleHandle);
+
+			return retVal;
+		}
+	}
+
 	switch (action)
 	{
 		case OPT_SHOW_MECHANISMS:
@@ -202,24 +221,24 @@ int main(int argc, char *argv[])
 			retVal = showSlots();
 			break;
 		case OPT_TEST_ALL:
-			if (testDNSSEC(slot, userPIN)) retVal = 1;
-			if (testSuiteB(slot, userPIN)) retVal = 1;
-			if (testRSAPub(slot, userPIN)) retVal = 1;
-			if (testRSAImport(slot, userPIN)) retVal = 1;
+			if (testDNSSEC(slotID, hSession)) retVal = 1;
+			if (testSuiteB(slotID, hSession)) retVal = 1;
+			if (testRSAPub(hSession)) retVal = 1;
+			if (testRSAImport(hSession)) retVal = 1;
 			break;
 		case OPT_TEST_DNSSEC:
-			retVal = testDNSSEC(slot, userPIN);
+			retVal = testDNSSEC(slotID, hSession);
 			break;
 		case OPT_TEST_RSAIMPORT:
-			retVal = testRSAImport(slot, userPIN);
+			retVal = testRSAImport(hSession);
 			break;
 		case OPT_TEST_RSAPUB:
-			retVal = testRSAPub(slot, userPIN);
+			retVal = testRSAPub(hSession);
 			break;
 		case OPT_TEST_STABILITY:
 			break;
 		case OPT_TEST_SUITEB:
-			retVal = testSuiteB(slot, userPIN);
+			retVal = testSuiteB(slotID, hSession);
 			break;
 		default:
 			break;

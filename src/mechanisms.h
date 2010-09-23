@@ -38,8 +38,8 @@
 #include "cryptoki.h"
 
 int showMechs(char *slot);
-int testDNSSEC(char *slot, char *pin);
-int testSuiteB(char *slot, char *pin);
+int testDNSSEC(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession);
+int testSuiteB(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession);
 
 // showMechs helper functions
 void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType);

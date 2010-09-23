@@ -33,7 +33,6 @@
  *****************************************************************************/
 
 #include "import.h"
-#include "session.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,11 +43,9 @@
 
 extern CK_FUNCTION_LIST_PTR p11;
 
-int testRSAImport(char *slot, char *pin)
+int testRSAImport(CK_SESSION_HANDLE hSession)
 {
-	CK_SLOT_ID slotID;
 	CK_RV rv;
-	CK_SESSION_HANDLE hSession;
 	int retVal = 0;
 
 	CK_BYTE n[] = {
@@ -143,11 +140,6 @@ int testRSAImport(char *slot, char *pin)
         };
 	CK_OBJECT_HANDLE hPublicKey, hPrivateKey;
 
-	if (openLogin(slot, pin, &slotID, &hSession))
-	{
-		return 1;
-	}
-
 	printf("\n************************************\n");
 	printf("* Test for importing RSA key pairs *\n");
 	printf("************************************\n\n");
@@ -178,7 +170,6 @@ int testRSAImport(char *slot, char *pin)
 
 	p11->C_DestroyObject(hSession, hPublicKey);
 	p11->C_DestroyObject(hSession, hPrivateKey);
-	p11->C_CloseSession(hSession);
 
 	return retVal;
 }

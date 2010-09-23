@@ -37,7 +37,7 @@
 
 #include "cryptoki.h"
 
-int testRSAPub(char *slot, char *pin);
+int testRSAPub(CK_SESSION_HANDLE hSession);
 
 // Internal
 int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, CK_OBJECT_HANDLE hPrivateKey);
