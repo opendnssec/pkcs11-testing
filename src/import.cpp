@@ -333,7 +333,7 @@ int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey)
 	}
 	else
 	{
-		printf("%i bits\n", modulus_bits);
+		printf("%lu bits\n", modulus_bits);
 	}
 
 	printf("Key size from CKA_MODULUS in public key: ");
@@ -378,7 +378,7 @@ int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey)
 	}
 	free(modulus);
 
-	printf("%i bits\n", bits);
+	printf("%lu bits\n", bits);
 
 	if (bits == modulus_bits)
 	{
