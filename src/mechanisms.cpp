@@ -715,17 +715,17 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 
 	if (mechName == NULL)
 	{
-		printf("  %lx", mechType);
+		printf("  0x%08X\n", mechType);
 	}
 	else
 	{
-		printf("  %s", mechName);
+		printf("  %s\n", mechName);
 	}
 
 	rv = p11->C_GetMechanismInfo(slotID, mechType, &info);
 	if (rv != CKR_OK)
 	{
-		printf(" Could not get info about the mechanism. rv=%s\n", rv2string(rv));
+		printf("   Could not get info about the mechanism. rv=%s\n", rv2string(rv));
 		return;
 	}
 
@@ -740,11 +740,11 @@ void printMechKeySize(CK_ULONG ulMinKeySize, CK_ULONG ulMaxKeySize)
 	{
 		if (ulMaxKeySize > ulMinKeySize)
 		{
-			printf(", key size (%i-%i)", ulMinKeySize, ulMaxKeySize);
+			printf("      Key size (%i-%i)\n", ulMinKeySize, ulMaxKeySize);
 		}
 		else
 		{
-			printf(", key size (%i)", ulMinKeySize);
+			printf("      Key size (%i)\n", ulMinKeySize);
 		}
 	}
 }
@@ -755,71 +755,71 @@ void printMechFlags(CK_FLAGS flags)
 
 	if (flags & CKF_HW)
 	{
-		stringFlags += ", performed by the device";
+		stringFlags += "using hardware: ";
 		flags ^= CKF_HW;
 	}
 	if (flags & CKF_ENCRYPT)
 	{
-		stringFlags += ", encrypt";
+		stringFlags += "encrypt ";
 		flags ^= CKF_ENCRYPT;
 	}
 	if (flags & CKF_DECRYPT)
 	{
-		stringFlags += ", decrypt";
+		stringFlags += "decrypt ";
 		flags ^= CKF_DECRYPT;
 	}
 	if (flags & CKF_DIGEST)
 	{
-		stringFlags += ", digest";
+		stringFlags += "digest ";
 		flags ^= CKF_DIGEST;
 	}
 	if (flags & CKF_SIGN)
 	{
-		stringFlags += ", sign";
+		stringFlags += "sign ";
 		flags ^= CKF_SIGN;
 	}
 	if (flags & CKF_SIGN_RECOVER)
 	{
-		stringFlags += ", sign recover";
+		stringFlags += "sign-recover ";
 		flags ^= CKF_SIGN_RECOVER;
 	}
 	if (flags & CKF_VERIFY)
 	{
-		stringFlags += ", verify";
+		stringFlags += "verify ";
 		flags ^= CKF_VERIFY;
 	}
 	if (flags & CKF_VERIFY_RECOVER)
 	{
-		stringFlags += ", verify recover";
+		stringFlags += "verify-recover ";
 		flags ^= CKF_VERIFY_RECOVER;
 	}
 	if (flags & CKF_GENERATE)
 	{
-		stringFlags += ", generate";
+		stringFlags += "generate ";
 		flags ^= CKF_GENERATE;
 	}
 	if (flags & CKF_GENERATE_KEY_PAIR)
 	{
-		stringFlags += ", generate key pair";
+		stringFlags += "generate-key-pair ";
 		flags ^= CKF_GENERATE_KEY_PAIR;
 	}
 	if (flags & CKF_WRAP)
 	{
-		stringFlags += ", wrap";
+		stringFlags += "wrap ";
 		flags ^= CKF_WRAP;
 	}
 	if (flags & CKF_UNWRAP)
 	{
-		stringFlags += ", unwrap";
+		stringFlags += "unwrap ";
 		flags ^= CKF_UNWRAP;
 	}
 	if (flags & CKF_DERIVE)
 	{
-		stringFlags += ", derive";
+		stringFlags += "derive ";
 		flags ^= CKF_DERIVE;
 	}
 
-	printf("%s", stringFlags.c_str());
+	printf("      %s\n", stringFlags.c_str());
 }
 
 const char* getMechName(CK_MECHANISM_TYPE mechType)
