@@ -674,6 +674,32 @@ typedef unsigned long ck_mechanism_type_t;
 #define CKM_X9_42_DH_PARAMETER_GEN	(0x2002)
 #define CKM_VENDOR_DEFINED		((unsigned long) (1 << 31))
 
+/* Missing mechanisms: Added by Rickard Bellgrim  */
+#define CKM_DES_OFB64			(0x150)
+#define CKM_DES_OFB8			(0x151)
+#define CKM_DES_CFB64			(0x152)
+#define CKM_DES_CFB8			(0x153)
+#define CKM_TLS_PRF			(0x378)
+#define CKM_SHA256_KEY_DERIVATION	(0x393)
+#define CKM_SHA384_KEY_DERIVATION	(0x394)
+#define CKM_SHA512_KEY_DERIVATION	(0x395)
+#define CKM_WTLS_PRE_MASTER_KEY_GEN	(0x3D0)
+#define CKM_WTLS_MASTER_KEY_DERIVE	(0x3D1)
+#define CKM_WTLS_MASTER_KEY_DERVIE_DH_ECC	(0x3D2)
+#define CKM_WTLS_PRF			(0x3D3)
+#define CKM_WTLS_SERVER_KEY_AND_MAC_DERIVE	(0x3D4)
+#define CKM_WTLS_CLIENT_KEY_AND_MAC_DERIVE	(0x3D5)
+#define CKM_CMS_SIG			(0x500)
+#define CKM_BLOWFISH_KEY_GEN		(0x1090)
+#define CKM_BLOWFISH_CBC		(0x1091)
+#define CKM_TWOFISH_KEY_GEN		(0x1092)
+#define CKM_TWOFISH_CBC			(0x1093)
+#define CKM_DES_ECB_ENCRYPT_DATA	(0x1100)
+#define CKM_DES_CBC_ENCRYPT_DATA	(0x1101)
+#define CKM_DES3_ECB_ENCRYPT_DATA	(0x1102)
+#define CKM_DES3_CBC_ENCRYPT_DATA	(0x1103)
+#define CKM_AES_ECB_ENCRYPT_DATA	(0x1104)
+#define CKM_AES_CBC_ENCRYPT_DATA	(0x1105)
 
 struct ck_mechanism
 {

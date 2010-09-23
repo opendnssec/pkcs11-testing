@@ -940,6 +940,14 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_CDMF_MAC_GENERAL";
 		case CKM_CDMF_CBC_PAD:
 			return "CKM_CDMF_CBC_PAD";
+		case CKM_DES_OFB64:
+			return "CKM_DES_OFB64";
+		case CKM_DES_OFB8:
+			return "CKM_DES_OFB8";
+		case CKM_DES_CFB64:
+			return "CKM_DES_CFB64";
+		case CKM_DES_CFB8:
+			return "CKM_DES_CFB8";
 		case CKM_MD2:
 			return "CKM_MD2";
 		case CKM_MD2_HMAC:
@@ -1012,18 +1020,18 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_CAST3_MAC_GENERAL";
 		case CKM_CAST3_CBC_PAD:
 			return "CKM_CAST3_CBC_PAD";
-		case CKM_CAST5_KEY_GEN:
-			return "CKM_CAST5_KEY_GEN";
-		case CKM_CAST5_ECB:
-			return "CKM_CAST5_ECB";
-		case CKM_CAST5_CBC:
-			return "CKM_CAST5_CBC";
-		case CKM_CAST5_MAC:
-			return "CKM_CAST5_MAC";
-		case CKM_CAST5_MAC_GENERAL:
-			return "CKM_CAST5_MAC_GENERAL";
-		case CKM_CAST5_CBC_PAD:
-			return "CKM_CAST5_CBC_PAD";
+		case CKM_CAST128_KEY_GEN:
+			return "CKM_CAST128_KEY_GEN";
+		case CKM_CAST128_ECB:
+			return "CKM_CAST128_ECB";
+		case CKM_CAST128_CBC:
+			return "CKM_CAST128_CBC";
+		case CKM_CAST128_MAC:
+			return "CKM_CAST128_MAC";
+		case CKM_CAST128_MAC_GENERAL:
+			return "CKM_CAST128_MAC_GENERAL";
+		case CKM_CAST128_CBC_PAD:
+			return "CKM_CAST128_CBC_PAD";
 		case CKM_RC5_KEY_GEN:
 			return "CKM_RC5_KEY_GEN";
 		case CKM_RC5_ECB:
@@ -1076,6 +1084,8 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_TLS_KEY_AND_MAC_DERIVE";
 		case CKM_TLS_MASTER_KEY_DERIVE_DH:
 			return "CKM_TLS_MASTER_KEY_DERIVE_DH";
+		case CKM_TLS_PRF:
+			return "CKM_TLS_PRF";
 		case CKM_SSL3_MD5_MAC:
 			return "CKM_SSL3_MD5_MAC";
 		case CKM_SSL3_SHA1_MAC:
@@ -1086,6 +1096,12 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_MD2_KEY_DERIVATION";
 		case CKM_SHA1_KEY_DERIVATION:
 			return "CKM_SHA1_KEY_DERIVATION";
+		case CKM_SHA256_KEY_DERIVATION:
+			return "CKM_SHA256_KEY_DERIVATION";
+		case CKM_SHA384_KEY_DERIVATION:
+			return "CKM_SHA384_KEY_DERIVATION";
+		case CKM_SHA512_KEY_DERIVATION:
+			return "CKM_SHA512_KEY_DERIVATION";
 		case CKM_PBE_MD2_DES_CBC:
 			return "CKM_PBE_MD2_DES_CBC";
 		case CKM_PBE_MD5_DES_CBC:
@@ -1094,10 +1110,10 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_PBE_MD5_CAST_CBC";
 		case CKM_PBE_MD5_CAST3_CBC:
 			return "CKM_PBE_MD5_CAST3_CBC";
-		case CKM_PBE_MD5_CAST5_CBC:
-			return "CKM_PBE_MD5_CAST5_CBC";
-		case CKM_PBE_SHA1_CAST5_CBC:
-			return "CKM_PBE_SHA1_CAST5_CBC";
+		case CKM_PBE_MD5_CAST128_CBC:
+			return "CKM_PBE_MD5_CAST128_CBC";
+		case CKM_PBE_SHA1_CAST128_CBC:
+			return "CKM_PBE_SHA1_CAST128_CBC";
 		case CKM_PBE_SHA1_RC4_128:
 			return "CKM_PBE_SHA1_RC4_128";
 		case CKM_PBE_SHA1_RC4_40:
@@ -1114,10 +1130,24 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_PKCS5_PBKD2";
 		case CKM_PBA_SHA1_WITH_SHA1_HMAC:
 			return "CKM_PBA_SHA1_WITH_SHA1_HMAC";
+		case CKM_WTLS_PRE_MASTER_KEY_GEN:
+			return "CKM_WTLS_PRE_MASTER_KEY_GEN";
+		case CKM_WTLS_MASTER_KEY_DERIVE:
+			return "CKM_WTLS_MASTER_KEY_DERIVE";
+		case CKM_WTLS_MASTER_KEY_DERVIE_DH_ECC:
+			return "CKM_WTLS_MASTER_KEY_DERVIE_DH_ECC";
+		case CKM_WTLS_PRF:
+			return "CKM_WTLS_PRF";
+		case CKM_WTLS_SERVER_KEY_AND_MAC_DERIVE:
+			return "CKM_WTLS_SERVER_KEY_AND_MAC_DERIVE";
+		case CKM_WTLS_CLIENT_KEY_AND_MAC_DERIVE:
+			return "CKM_WTLS_CLIENT_KEY_AND_MAC_DERIVE";
 		case CKM_KEY_WRAP_LYNKS:
 			return "CKM_KEY_WRAP_LYNKS";
 		case CKM_KEY_WRAP_SET_OAEP:
 			return "CKM_KEY_WRAP_SET_OAEP";
+		case CKM_CMS_SIG:
+			return "CKM_CMS_SIG";
 		case CKM_SKIPJACK_KEY_GEN:
 			return "CKM_SKIPJACK_KEY_GEN";
 		case CKM_SKIPJACK_ECB64:
@@ -1198,6 +1228,26 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_AES_MAC_GENERAL";
 		case CKM_AES_CBC_PAD:
 			return "CKM_AES_CBC_PAD";
+		case CKM_BLOWFISH_KEY_GEN:
+			return "CKM_BLOWFISH_KEY_GEN";
+		case CKM_BLOWFISH_CBC:
+			return "CKM_BLOWFISH_CBC";
+		case CKM_TWOFISH_KEY_GEN:
+			return "CKM_TWOFISH_KEY_GEN";
+		case CKM_TWOFISH_CBC:
+			return "CKM_TWOFISH_CBC";
+		case CKM_DES_ECB_ENCRYPT_DATA:
+			return "CKM_DES_ECB_ENCRYPT_DATA";
+		case CKM_DES_CBC_ENCRYPT_DATA:
+			return "CKM_DES_CBC_ENCRYPT_DATA";
+		case CKM_DES3_ECB_ENCRYPT_DATA:
+			return "CKM_DES3_ECB_ENCRYPT_DATA";
+		case CKM_DES3_CBC_ENCRYPT_DATA:
+			return "CKM_DES3_CBC_ENCRYPT_DATA";
+		case CKM_AES_ECB_ENCRYPT_DATA:
+			return "CKM_AES_ECB_ENCRYPT_DATA";
+		case CKM_AES_CBC_ENCRYPT_DATA:
+			return "CKM_AES_CBC_ENCRYPT_DATA";
 		case CKM_DSA_PARAMETER_GEN:
 			return "CKM_DSA_PARAMETER_GEN";
 		case CKM_DH_PKCS_PARAMETER_GEN:
