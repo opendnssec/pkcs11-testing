@@ -38,6 +38,7 @@
 #include "mechanisms.h"
 #include "showslots.h"
 #include "publickey.h"
+#include "import.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -204,11 +205,13 @@ int main(int argc, char *argv[])
 			if (testDNSSEC(slot, userPIN)) retVal = 1;
 			if (testSuiteB(slot, userPIN)) retVal = 1;
 			if (testRSAPub(slot, userPIN)) retVal = 1;
+			if (testRSAImport(slot, userPIN)) retVal = 1;
 			break;
 		case OPT_TEST_DNSSEC:
 			retVal = testDNSSEC(slot, userPIN);
 			break;
 		case OPT_TEST_RSAIMPORT:
+			retVal = testRSAImport(slot, userPIN);
 			break;
 		case OPT_TEST_RSAPUB:
 			retVal = testRSAPub(slot, userPIN);

@@ -13,6 +13,7 @@ pkcs11_testing_SOURCES =	pkcs11-testing.cpp \
 				library.cpp \
 				mechanisms.cpp \
 				publickey.cpp \
+				import.cpp \
 				session.cpp \
 				showslots.cpp
 
