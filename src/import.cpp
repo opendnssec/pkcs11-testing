@@ -249,7 +249,10 @@ int testRSAImport(CK_SESSION_HANDLE hSession)
 	printf("\n************************************\n");
 	printf("* Test for importing RSA key pairs *\n");
 	printf("************************************\n\n");
-	printf("(Note: Some HSM:s might not accept 1025 bit keys)\n\n");
+	printf("This test will try to import 1024 bit and 1025 bit\n");
+	printf("key pairs. Some HSM:s might not accept the odd size 1025.\n");
+	printf("Also verify that the HSM set the key lengths correctly.\n\n");
+
 	printf("Importing 1024 bit public RSA key: ");
 	rv = p11->C_CreateObject(hSession, pubTemplate_1024, 10, &hPublicKey);
 	if (rv != CKR_OK)
@@ -325,6 +328,7 @@ int testRSAImport_size(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey)
 	if (rv != CKR_OK)
 	{
 		printf("Failed to get attribute. rv=%s\n", rv2string(rv));
+		modulus_bits = 0;
 		retVal = 1;
 	}
 	else
