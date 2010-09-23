@@ -41,5 +41,6 @@ int testRSAPub(char *slot, char *pin);
 
 // Internal
 int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, CK_OBJECT_HANDLE hPrivateKey);
+void printBinBuffer(void *pValue, unsigned long ulValueLen);
 
 #endif // !_PKCS11_TESTING_PUBLICKEY_H

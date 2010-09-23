@@ -169,6 +169,11 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 	}
 
 	printf("OK\n");
+	printf("Public exponent: ");
+	printBinBuffer(public_exponent1, public_exponent_len1);
+	printf("Modulus: ");
+	printBinBuffer(modulus1, modulus_len1);
+
 	printf("Public key information from private key object: ");
 
 	// Get buffer sizes
@@ -226,29 +231,28 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 		free(modulus2);
 		return 1;
 	}
-	printf("OK");
 
 	// Make sure that the information from the public and private key are equal
 	if
 	(
 		public_exponent_len1 != public_exponent_len2 ||
-		memcmp(public_exponent1, public_exponent2, public_exponent_len1) != 0
-	)
-	{
-		printf(", but different pubexp");
-		retVal = 1;
-	}
-	if
-	(
+		memcmp(public_exponent1, public_exponent2, public_exponent_len1) != 0 ||
 		modulus_len1 != modulus_len2 ||
 		memcmp(modulus1, modulus2, modulus_len1) != 0
 	)
 	{
-		printf(", but different modulus");
+		printf("Failed. The key information is not equal.\n");
 		retVal = 1;
 	}
+	else
+	{
+		printf("OK\n");
+	}
 
-	printf("\n");
+	printf("Public exponent: ");
+	printBinBuffer(public_exponent2, public_exponent_len2);
+	printf("Modulus: ");
+	printBinBuffer(modulus2, modulus_len2);
 
 	free(public_exponent1);
 	free(modulus1);
@@ -256,4 +260,19 @@ int testRSAPub_keypair(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPublicKey, 
 	free(modulus2);
 
 	return retVal;
+}
+
+void printBinBuffer(void *pValue, unsigned long ulValueLen)
+{
+	char *buffer = (char*)pValue;
+
+	if (buffer != NULL)
+	{
+		for (int i = 0; i < ulValueLen; i++)
+		{
+			printf("%02X", buffer[i] & 0xFF);
+		}
+	}
+
+	printf("\n");
 }
