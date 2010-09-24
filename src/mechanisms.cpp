@@ -139,16 +139,16 @@ int testSuiteB_AES(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 
 	CK_MECHANISM_TYPE types[] = {
 		CKM_AES_KEY_GEN,
-		CKM_AES_CBC
+		CKM_AES_CBC,
+		CKM_AES_CTR
 	};
 
 	printf("\nTesting symmetric encryption\n");
 	printf("****************************\n");
 	printf("  (Not testing functionality)\n");
-	printf("  Should support between 128 and 256 bits.\n");
-	printf("  Note that GCM mode is not supported in PKCS#11 v2.20.\n\n");
+	printf("  Should support between 128 and 256 bits.\n\n");
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		printf("  %s: ", getMechName(types[i]));
 		rv = p11->C_GetMechanismInfo(slotID, types[i], &info);
