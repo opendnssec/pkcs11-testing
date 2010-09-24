@@ -708,19 +708,11 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 {
 	CK_MECHANISM_INFO info;
 	CK_RV rv;
-	const char *mechName = getMechName(mechType);
 
 	info.ulMinKeySize = 0;
 	info.ulMaxKeySize = 0;
 
-	if (mechName == NULL)
-	{
-		printf("  0x%08X (unknown)\n", mechType);
-	}
-	else
-	{
-		printf("  %s\n", mechName);
-	}
+	printf("  %s\n", getMechName(mechType));
 
 	rv = p11->C_GetMechanismInfo(slotID, mechType, &info);
 	if (rv != CKR_OK)
@@ -829,6 +821,8 @@ void printMechFlags(CK_FLAGS flags)
 
 const char* getMechName(CK_MECHANISM_TYPE mechType)
 {
+	static char buffer[20];
+
 	switch (mechType)
 	{
 		case CKM_RSA_PKCS_KEY_PAIR_GEN:
@@ -891,6 +885,10 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_SHA384_RSA_PKCS_PSS";
 		case CKM_SHA512_RSA_PKCS_PSS:
 			return "CKM_SHA512_RSA_PKCS_PSS";
+		case CKM_SHA224_RSA_PKCS:
+			return "CKM_SHA224_RSA_PKCS";
+		case CKM_SHA224_RSA_PKCS_PSS:
+			return "CKM_SHA224_RSA_PKCS_PSS";
 		case CKM_RC2_KEY_GEN:
 			return "CKM_RC2_KEY_GEN";
 		case CKM_RC2_ECB:
@@ -989,6 +987,12 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_SHA256_HMAC";
 		case CKM_SHA256_HMAC_GENERAL:
 			return "CKM_SHA256_HMAC_GENERAL";
+		case CKM_SHA224:
+			return "CKM_SHA224";
+		case CKM_SHA224_HMAC:
+			return "CKM_SHA224_HMAC";
+		case CKM_SHA224_HMAC_GENERAL:
+			return "CKM_SHA224_HMAC_GENERAL";
 		case CKM_SHA384:
 			return "CKM_SHA384";
 		case CKM_SHA384_HMAC:
@@ -1001,6 +1005,18 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_SHA512_HMAC";
 		case CKM_SHA512_HMAC_GENERAL:
 			return "CKM_SHA512_HMAC_GENERAL";
+		case CKM_SECURID_KEY_GEN:
+			return "CKM_SECURID_KEY_GEN";
+		case CKM_SECURID:
+			return "CKM_SECURID";
+		case CKM_HOTP_KEY_GEN:
+			return "CKM_HOTP_KEY_GEN";
+		case CKM_HOTP:
+			return "CKM_HOTP";
+		case CKM_ACTI:
+			return "CKM_ACTI";
+		case CKM_ACTI_KEY_GEN:
+			return "CKM_ACTI_KEY_GEN";
 		case CKM_CAST_KEY_GEN:
 			return "CKM_CAST_KEY_GEN";
 		case CKM_CAST_ECB:
@@ -1107,6 +1123,8 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_SHA384_KEY_DERIVATION";
 		case CKM_SHA512_KEY_DERIVATION:
 			return "CKM_SHA512_KEY_DERIVATION";
+		case CKM_SHA224_KEY_DERIVATION:
+			return "CKM_SHA224_KEY_DERIVATION";
 		case CKM_PBE_MD2_DES_CBC:
 			return "CKM_PBE_MD2_DES_CBC";
 		case CKM_PBE_MD5_DES_CBC:
@@ -1153,6 +1171,46 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_KEY_WRAP_SET_OAEP";
 		case CKM_CMS_SIG:
 			return "CKM_CMS_SIG";
+		case CKM_KIP_DERIVE:
+			return "CKM_KIP_DERIVE";
+		case CKM_KIP_WRAP:
+			return "CKM_KIP_WRAP";
+		case CKM_KIP_MAC:
+			return "CKM_KIP_MAC";
+		case CKM_CAMELLIA_KEY_GEN:
+			return "CKM_CAMELLIA_KEY_GEN";
+		case CKM_CAMELLIA_ECB:
+			return "CKM_CAMELLIA_ECB";
+		case CKM_CAMELLIA_CBC:
+			return "CKM_CAMELLIA_CBC";
+		case CKM_CAMELLIA_MAC:
+			return "CKM_CAMELLIA_MAC";
+		case CKM_CAMELLIA_MAC_GENERAL:
+			return "CKM_CAMELLIA_MAC_GENERAL";
+		case CKM_CAMELLIA_CBC_PAD:
+			return "CKM_CAMELLIA_CBC_PAD";
+		case CKM_CAMELLIA_ECB_ENCRYPT_DATA:
+			return "CKM_CAMELLIA_ECB_ENCRYPT_DATA";
+		case CKM_CAMELLIA_CBC_ENCRYPT_DATA:
+			return "CKM_CAMELLIA_CBC_ENCRYPT_DATA";
+		case CKM_CAMELLIA_CTR:
+			return "CKM_CAMELLIA_CTR";
+		case CKM_ARIA_KEY_GEN:
+			return "CKM_ARIA_KEY_GEN";
+		case CKM_ARIA_ECB:
+			return "CKM_ARIA_ECB";
+		case CKM_ARIA_CBC:
+			return "CKM_ARIA_CBC";
+		case CKM_ARIA_MAC:
+			return "CKM_ARIA_MAC";
+		case CKM_ARIA_MAC_GENERAL:
+			return "CKM_ARIA_MAC_GENERAL";
+		case CKM_ARIA_CBC_PAD:
+			return "CKM_ARIA_CBC_PAD";
+		case CKM_ARIA_ECB_ENCRYPT_DATA:
+			return "CKM_ARIA_ECB_ENCRYPT_DATA";
+		case CKM_ARIA_CBC_ENCRYPT_DATA:
+			return "CKM_ARIA_CBC_ENCRYPT_DATA";
 		case CKM_SKIPJACK_KEY_GEN:
 			return "CKM_SKIPJACK_KEY_GEN";
 		case CKM_SKIPJACK_ECB64:
@@ -1233,6 +1291,8 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 			return "CKM_AES_MAC_GENERAL";
 		case CKM_AES_CBC_PAD:
 			return "CKM_AES_CBC_PAD";
+		case CKM_AES_CTR:
+			return "CKM_AES_CTR";
 		case CKM_BLOWFISH_KEY_GEN:
 			return "CKM_BLOWFISH_KEY_GEN";
 		case CKM_BLOWFISH_CBC:
@@ -1262,8 +1322,10 @@ const char* getMechName(CK_MECHANISM_TYPE mechType)
 		case CKM_VENDOR_DEFINED:
 			return "CKM_VENDOR_DEFINED";
 		defult:
-			return NULL;
+			break;
 	}
 
-	return NULL;
+	sprintf(buffer, "0x%08X", mechType);
+
+	return buffer;
 }
