@@ -727,18 +727,21 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 
 void printMechKeySize(CK_ULONG ulMinKeySize, CK_ULONG ulMaxKeySize)
 {
+	char buffer[512];
+	buffer[0] = '\0';
+
 	if (ulMinKeySize)
 	{
 		if (ulMaxKeySize > ulMinKeySize)
 		{
-			printf("Key size: %i - %i", ulMinKeySize, ulMaxKeySize);
+			sprintf(buffer, "%i - %i", ulMinKeySize, ulMaxKeySize);
 		}
 		else
 		{
-			printf("Key size: %i", ulMinKeySize);
+			sprintf(buffer, "%i", ulMinKeySize);
 		}
 	}
-	printf("\n");
+	printf("%-14s", buffer);
 }
 
 void printMechFlags(CK_FLAGS flags)
@@ -816,7 +819,7 @@ void printMechFlags(CK_FLAGS flags)
 		flags ^= CKF_DERIVE;
 	}
 
-	printf("      %s\n", stringFlags.c_str());
+	printf("%s\n", stringFlags.c_str());
 }
 
 const char* getMechName(CK_MECHANISM_TYPE mechType)
