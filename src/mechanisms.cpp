@@ -712,7 +712,7 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 	info.ulMinKeySize = 0;
 	info.ulMaxKeySize = 0;
 
-	printf("  %s\n", getMechName(mechType));
+	printf("%-36s", getMechName(mechType));
 
 	rv = p11->C_GetMechanismInfo(slotID, mechType, &info);
 	if (rv != CKR_OK)
@@ -723,7 +723,6 @@ void printMechInfo(CK_SLOT_ID slotID, CK_MECHANISM_TYPE mechType)
 
 	printMechKeySize(info.ulMinKeySize, info.ulMaxKeySize);
 	printMechFlags(info.flags);
-	printf("\n");
 }
 
 void printMechKeySize(CK_ULONG ulMinKeySize, CK_ULONG ulMaxKeySize)
@@ -732,13 +731,14 @@ void printMechKeySize(CK_ULONG ulMinKeySize, CK_ULONG ulMaxKeySize)
 	{
 		if (ulMaxKeySize > ulMinKeySize)
 		{
-			printf("      Key size: %i - %i\n", ulMinKeySize, ulMaxKeySize);
+			printf("Key size: %i - %i", ulMinKeySize, ulMaxKeySize);
 		}
 		else
 		{
-			printf("      Key size: %i\n", ulMinKeySize);
+			printf("Key size: %i", ulMinKeySize);
 		}
 	}
+	printf("\n");
 }
 
 void printMechFlags(CK_FLAGS flags)
@@ -747,12 +747,12 @@ void printMechFlags(CK_FLAGS flags)
 
 	if (flags & CKF_HW)
 	{
-		printf("      Using hardware: Yes\n");
+		stringFlags += "HW ";
 		flags ^= CKF_HW;
 	}
 	else
 	{
-		printf("      Using hardware: No\n");
+		stringFlags += "No-HW ";
 	}
 
 	if (flags & CKF_ENCRYPT)
