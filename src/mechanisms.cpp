@@ -424,7 +424,7 @@ int testDNSSEC_rsa_keygen(CK_SLOT_ID slotID, CK_SESSION_HANDLE hSession)
 	};
 
 	printf("\nTesting RSA key generation\n");
-	printf("******************************\n");
+	printf("**************************\n");
 	printf("  Will test if RSA key generation is supported.\n");
 	printf("  DNSSEC support keys up to 4096 bits.\n\n");
 

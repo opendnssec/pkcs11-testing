@@ -41,6 +41,7 @@
 #include "publickey.h"
 #include "import.h"
 #include "error.h"
+#include "stability.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,31 +57,39 @@ void usage()
 	printf("Program for testing HSMs using PKCS#11\n");
 	printf("Usage: pkcs11-testing [ACTION] [OPTIONS]\n");
 	printf("[ACTIONS]\n");
-	printf("  -h                Shows this help screen.\n");
-	printf("  --help            Shows this help screen.\n");
-	printf("  --show-mechanisms Display the available mechanisms.\n");
-	printf("  --show-slots      Display the available slots.\n");
-	printf("  --test-all        Run all tests (except stability test)\n");
-	printf("  --test-dnssec     Test if the DNSSEC algorithms are available.\n");
-	printf("  --test-rsaimport  Test if RSA keys can be imported.\n");
-	printf("  --test-rsapub     Test if the public information is available in the private key.\n");
-	printf("  --test-stability  Test if the HSM is stable. Creating keys and signing.\n");
-	printf("  --test-suiteb     Test if the NSA Suite B algorithms are available.\n");
-	printf("  -v                Show version info.\n");
-	printf("  --version         Show version info.\n");
+	printf("  -h                    Shows this help screen.\n");
+	printf("  --help                Shows this help screen.\n");
+	printf("  --show-mechanisms     Display the available mechanisms.\n");
+	printf("  --show-slots          Display the available slots.\n");
+	printf("  --test-all            Run all tests (except stability test)\n");
+	printf("  --test-dnssec         Test if the DNSSEC algorithms are available.\n");
+	printf("  --test-rsaimport      Test if RSA keys can be imported.\n");
+	printf("  --test-rsapub         Test if the public information is available in the private key.\n");
+	printf("  --test-stability      Test if the HSM is stable. Creating keys and signing.\n");
+	printf("  --test-suiteb         Test if the NSA Suite B algorithms are available.\n");
+	printf("  -v                    Show version info.\n");
+	printf("  --version             Show version info.\n");
 	printf("[OPTIONS]\n");
-	printf("  --module <path>   The path to the PKCS#11 library.\n");
-	printf("  --pin <PIN>       The PIN for the normal user.\n");
-	printf("  --slot <number>   The slot where the token is located.\n");
+	printf("  --batchjobs <number>  The number of batchjobs in the stability test.\n");
+	printf("  --module <path>       The path to the PKCS#11 library.\n");
+	printf("  --pin <PIN>           The PIN for the normal user.\n");
+	printf("  --rollovers <number>  The number of rollovers in the stability test.\n");
+	printf("  --signatures <number> The number of signatures in the stability test.\n");
+	printf("  --sleep <seconds>     The time between each batchjob.\n");
+	printf("  --slot <number>       The slot where the token is located.\n");
 }
 
 // Enumeration of the long options
 enum {
-	OPT_HELP = 0x100,
+	OPT_BATCHJOBS = 0x100,
+	OPT_HELP,
 	OPT_MODULE,
 	OPT_PIN,
+	OPT_ROLLOVERS,
 	OPT_SHOW_MECHANISMS,
 	OPT_SHOW_SLOTS,
+	OPT_SIGNATURES,
+	OPT_SLEEP,
 	OPT_SLOT,
 	OPT_TEST_ALL,
 	OPT_TEST_DNSSEC,
@@ -93,11 +102,15 @@ enum {
 
 // Text representation of the long options
 static const struct option long_options[] = {
+	{ "batchjobs",       1, NULL, OPT_BATCHJOBS },
 	{ "help",            0, NULL, OPT_HELP },
 	{ "module",          1, NULL, OPT_MODULE },
 	{ "pin",             1, NULL, OPT_PIN },
+	{ "rollovers",       1, NULL, OPT_ROLLOVERS },
 	{ "show-mechanisms", 0, NULL, OPT_SHOW_MECHANISMS },
 	{ "show-slots",      0, NULL, OPT_SHOW_SLOTS },
+	{ "signatures",      1, NULL, OPT_SIGNATURES },
+	{ "sleep",           1, NULL, OPT_SLEEP },
 	{ "slot",            1, NULL, OPT_SLOT },
 	{ "test-all",        0, NULL, OPT_TEST_ALL },
 	{ "test-dnssec",     0, NULL, OPT_TEST_DNSSEC },
@@ -116,6 +129,10 @@ int main(int argc, char *argv[])
 {
 	int option_index = 0, opt, retVal = 0, action = 0, needSession = 0;
 
+	int rollovers = 2;
+	int batchjobs = 2;
+	int signatures = 100;
+	int sleepTime = 15;
 	char *userPIN = NULL;
 	char *module = NULL;
 	char *slot = NULL;
@@ -144,6 +161,18 @@ int main(int argc, char *argv[])
 			case OPT_TEST_SUITEB:
 				needSession = 1;
 				action = opt;
+				break;
+			case OPT_BATCHJOBS:
+				batchjobs = atoi(optarg);
+				break;
+			case OPT_ROLLOVERS:
+				rollovers = atoi(optarg);
+				break;
+			case OPT_SIGNATURES:
+				signatures = atoi(optarg);
+				break;
+			case OPT_SLEEP:
+				sleepTime = atoi(optarg);
 				break;
 			case OPT_SLOT:
 				slot = optarg;
@@ -237,6 +266,7 @@ int main(int argc, char *argv[])
 			retVal = testRSAPub(hSession);
 			break;
 		case OPT_TEST_STABILITY:
+			retVal = testStability(slotID, hSession, rollovers, batchjobs, signatures, sleepTime);
 			break;
 		case OPT_TEST_SUITEB:
 			retVal = testSuiteB(slotID, hSession);

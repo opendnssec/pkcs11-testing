@@ -439,7 +439,7 @@ int testRSAImport_signverify(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hPubli
 	rv = p11->C_VerifyInit(hSession, &mechanism, hPublicKey);
 	if (rv != CKR_OK)
 	{
-		printf("Failed to sign data. rv=%s\n", rv2string(rv));
+		printf("Failed to initialize verification. rv=%s\n", rv2string(rv));
 		free (pSignature);
 		return 1;
 	}

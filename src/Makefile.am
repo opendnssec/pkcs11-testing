@@ -16,7 +16,8 @@ pkcs11_testing_SOURCES =	pkcs11-testing.cpp \
 				publickey.cpp \
 				import.cpp \
 				session.cpp \
-				showslots.cpp
+				showslots.cpp \
+				stability.cpp
 
 EXTRA_DIST =			$(srcdir)/*.h \
 				$(srcdir)/cryptoki_compat/*.h
