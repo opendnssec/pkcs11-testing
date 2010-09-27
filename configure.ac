@@ -11,9 +11,9 @@ dnl
 # Program version
 
 define([VERSION_MAJOR], [0])
-define([VERSION_MINOR], [1])
+define([VERSION_MINOR], [9])
 define([VERSION_FIX], [0])
-define([PACKAGE_SUFFIX], [a1])
+define([PACKAGE_SUFFIX], [b1])
 
 ##################
 #                #

@@ -1,0 +1,17 @@
+$Id$
+
+1. Configure the installation/compilation scripts
+
+   ./configure
+
+2. Compile the source code
+
+   make
+
+3. Install the program
+
+   sudo make install
+
+4. Run the program
+
+   pkcs11-testing
